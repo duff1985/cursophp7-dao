@@ -1,10 +1,12 @@
 <?php
 
-	require_once("config.php");
+require_once("config.php");
 
-$user = new usuario();
+// carrega um usuario usando o login e senha
+$usuario = new usuario();
 
-$user->loadById(3);
+$usuario->login("hermes","abcde");
 
-echo $user;
+echo $usuario;
+
 ?>
