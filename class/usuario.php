@@ -85,6 +85,41 @@ class usuario{
 			
 		}
 	}
+
+	public function setData($data){
+			$this->setIdusuario($data['idusuario']);
+			$this->setDeslogin($data['deslogin']);
+			$this->setDessenha($data['dessenha']);
+			$this->setDtcadastro(new DateTime($data['dtcadastro']));
+	}
+
+	public function insert(){
+		$sql = new Sql();
+
+		//=> vamos criar uma procedure com 02 parametros (:PASSWORD, :LOGIN)
+		$result = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+			":LOGIN"=>$this->getDeslogin(),		
+			":PASSWORD"=>$this->getDessenha()		
+		));
+
+		if(count($result)>0){		//=> se existe pelo meno 1 registro
+			$this->setData($result[0]);
+
+		}
+	}
+
+	public function update($login, $password){
+		
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
+
+		$sql = new Sql();
+		$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha(),
+			':ID'=>$this->getIdusuario()
+		));
+	}
 	
 
 	public function __toString(){		//=> metodo que imprime os dados
